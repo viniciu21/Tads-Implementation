@@ -6,17 +6,17 @@ using namespace std;
 void console(string message){
   cout << message << "\n";
 }
-
+template <typename T>
 struct Node {
-  int valor;
+  T valor;
   Node *next;
 };
-
+template <class U>
 class SinglyLinkedList{
   public:
     int size;
-    Node *tail;
-    Node *head;
+    Node<U> *tail;
+    Node<U> *head;
     SinglyLinkedList(){
 			size = 0;
 			head = nullptr;
@@ -25,8 +25,8 @@ class SinglyLinkedList{
 		int getSize(){
 			return this->size;
 		}
-    void AddAtLast(int x){
-			Node *tmp = new Node;
+    void AddAtLast(U x){
+			Node<U> *tmp = new Node<U>();
 			tmp->valor = x;
 			tmp->next = nullptr;
 			if(head == nullptr){
@@ -41,20 +41,20 @@ class SinglyLinkedList{
     }
 
     void showAll(){
-			Node *tmp = new Node();
+			Node<U> *tmp = new Node<U>();
 			tmp = this->head;
 			while(tmp != nullptr){
-					cout << tmp->valor << "-";
-					tmp = tmp->next;
+				cout << tmp->valor << "-";
+				tmp = tmp->next;
 			}
-			cout << '\n';
+				cout << '\n';
     }
 
-    void addAtFront(int value){
-      Node *inserted = new Node();
+    void addAtFront(U value){
+      Node<U> *inserted = new Node<U>();
       inserted->valor = value;
       inserted->next = nullptr;
-      Node *tmp = new Node();
+      Node<U> *tmp = new Node<U>();
       tmp = this->head;
       if(head == nullptr){
         head = inserted;
@@ -67,15 +67,15 @@ class SinglyLinkedList{
       }
     }
 
-    void addAtIndex(int index, int value){
+    void addAtIndex(int index, U value){
 			if(index < 0  || index > this->size){
 				cout << "Out of Range" << "\n";
 				return;
 			}
-			Node *inserted = new Node();
+			Node<U> *inserted = new Node<U>();
 			inserted->valor = value;
 			inserted->next = nullptr;
-			Node *tmp = new Node();
+			Node<U> *tmp = new Node<U>();
 			tmp = this->head;
 			if(index == 0){
 				this->addAtFront(value);
@@ -90,8 +90,8 @@ class SinglyLinkedList{
 				this->size++;
 			}
     }
-		Node* searchByIndex(int position){
-			Node* tmp = new Node();
+		Node<U>* searchByIndex(int position){
+			Node<U>* tmp = new Node<U>();
 			tmp = this->head;
 
 			for(int i = 0; i < position; i++){
@@ -100,7 +100,7 @@ class SinglyLinkedList{
 			return tmp;
 		}
 		void deleteByIndex(int position){
-			Node* tmp = new Node();
+			Node<U>* tmp = new Node<U>();
 			tmp = this->head;
 
 			if(position == 0){
@@ -111,14 +111,14 @@ class SinglyLinkedList{
 				for(int i = 0; i < position - 1; i++){
 					tmp = tmp->next;
 				}
-				Node *nextNode = tmp->next->next;
+				Node<U> *nextNode = tmp->next->next;
 				delete tmp->next;
 				tmp->next = nextNode;
 				this->size--;
 			}
 		}
 		void deleteAtFront(){
-			Node* tmp = new Node();
+			Node<U>* tmp = new Node<U>();
 			tmp = this->head;
 
 			this->head = tmp->next;
@@ -126,12 +126,12 @@ class SinglyLinkedList{
 			this->size--;
 		}
 		void deleteAtTail(){
-			Node* tmp = new Node();
+			Node<U>* tmp = new Node<U>();
 			tmp = this->head;
 			for(int i = 0; i < this->getSize() - 2; i++){
 				tmp = tmp->next;
 			}
-			Node* deleteNode = tmp->next;
+			Node<U>* deleteNode = tmp->next;
 			tail = tmp;
 			delete deleteNode;
 			tail->next = nullptr;
@@ -139,17 +139,25 @@ class SinglyLinkedList{
 		}
 };
 
+bool isPalindrome(string message){
+  SinglyLinkedList<char> *list = new SinglyLinkedList<char>();
+
+	for(size_t i{0}; i < message.length(); i++){
+		list->AddAtLast(message.at(i));
+	}
+
+	for(size_t i{0}; i < list->getSize(); i++){
+		if(list->searchByIndex(i)->valor != list->searchByIndex((list->getSize() - 1) - i)->valor){
+			return false;
+		}
+	}
+
+	return true;
+}
+
 int main(){
-    SinglyLinkedList *list = new SinglyLinkedList();
-		list->AddAtLast(12);
-		list->AddAtLast(13);
-		list->addAtIndex(1,10);
-		list->addAtIndex(3,15);
-		list->deleteAtTail();
-		list->deleteAtTail();
-		list->deleteByIndex(0);
-		list->deleteByIndex(0);
-		// Node* node = list->searchByIndex();
-		// cout << node->valor << "\n";
-		list->showAll();
+	string message{"aca"};
+
+	bool response = isPalindrome(message);
+	cout << (response ? "é um palindromo" : "n é um palindromo") << "\n";
 }
