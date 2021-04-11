@@ -1,5 +1,5 @@
 #include <iostream>
-
+#include <cstdarg> 
 using namespace std;
 
 template <class T>
@@ -88,11 +88,25 @@ class DoublyLinkedList{
 	}
 };
 
+void listarg(int number, ...){
+	va_list list;
+	va_start(list, number);
+	
+	int var;
+
+	while((var = va_arg(list, int))){
+		cout << var << "\n";
+	}
+
+	va_end(list);
+}
+
 int main(){
 	DoublyLinkedList<int> *list = new DoublyLinkedList<int>();
 	list->pushBack(12);
 	list->pushFront(21);
-	cout <<  (list->getTail()->getNext() == nullptr )<< "\n";
+	
+	listarg(2, 1, 2);
 
 	list->printNodes();
 	return 0;
